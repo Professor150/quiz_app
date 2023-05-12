@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/utils/constants/colors_constants.dart';
-
-
 class QuizBgColor extends StatelessWidget {
-  final Widget widget;
-  QuizBgColor(this.widget);
+  final Widget child;
+  const QuizBgColor({required this.child});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,13 +10,9 @@ class QuizBgColor extends StatelessWidget {
       height: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.amber.shade200, darkBlue],
-        ),
+        color: Colors.white,
       ),
-      child: widget,
+      child: child,
     );
   }
 }
