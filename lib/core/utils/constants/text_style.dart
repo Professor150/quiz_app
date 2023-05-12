@@ -23,6 +23,7 @@ Widget headingText({
   return Text(
     text!,
     style: TextStyle(
+      overflow: TextOverflow.ellipsis,
       fontFamily: "quick_bold",
       fontSize: size,
       color: color,

@@ -1,5 +1,5 @@
 class Routes {
-  final String homepage = '/homepage';
-  final String splashScreen = '/splashScreen';
-
+  final String quizScreen = '/';
+  final String viewdeatail = '/viewdetail';
+  final String category = '/category';
 }
