@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:quiz_app/core/routes/routes.dart';
 import 'package:quiz_app/features/quiz/data/data%20source/remote/api_service.dart';
 import 'package:quiz_app/features/quiz/presentation/page/quiz_page.dart';
+import 'package:quiz_app/features/quiz/presentation/page/splash_page.dart';
 import 'features/quiz/presentation/page/catagory_page.dart';
 
 main() {
@@ -28,6 +29,7 @@ class QuizApp extends StatelessWidget {
                 exams: [],
                 category: '',
               ),
+          Routes().splashScreen: (context) => WelcomeScreen(),
         },
       ),
     );

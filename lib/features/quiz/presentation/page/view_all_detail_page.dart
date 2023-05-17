@@ -1,8 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-
 import 'package:quiz_app/features/quiz/data/model/quiz_data_model.dart';
 
 class ViewAllDetailPage extends StatefulWidget {
@@ -10,12 +6,27 @@ class ViewAllDetailPage extends StatefulWidget {
   final int point;
   final int correctAnswer;
   final int wrongAnswer;
-  const ViewAllDetailPage({
+  final List<UserPreference> userPreference;
+  final List<String> correctAnsweredQuestions;
+  final List<String> wrongQuestions;
+  final List<String> userTappedOption;
+  final List<String> options;
+  final List<String> alloptions;
+  List<Map<String, dynamic>> questionOptions;
+
+  ViewAllDetailPage({
     Key? key,
     required this.exams,
     required this.point,
     required this.correctAnswer,
     required this.wrongAnswer,
+    required this.userPreference,
+    required this.correctAnsweredQuestions,
+    required this.wrongQuestions,
+    required this.userTappedOption,
+    required this.options,
+    required this.alloptions,
+    required this.questionOptions,
   }) : super(key: key);
 
   @override
@@ -24,7 +35,7 @@ class ViewAllDetailPage extends StatefulWidget {
 
 class _ViewAllDetailPageState extends State<ViewAllDetailPage> {
   int questionIndex = 0;
-
+  int i = 1;
   void goToNextQuestion() {
     setState(() {
       if (questionIndex < widget.exams.length - 1) {
@@ -43,9 +54,27 @@ class _ViewAllDetailPageState extends State<ViewAllDetailPage> {
     });
   }
 
+  Map<int, dynamic> questAndOption = {};
+  void updateListOnTap(List<String> opt) {
+    questAndOption[i] = opt;
+    print("The option in method is $opt");
+
+    print(questAndOption);
+    i++;
+    print("i++ is $i");
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userPressedoption = widget.userTappedOption[questionIndex];
+    final List<String> allQuestions = []
+      ..addAll(widget.wrongQuestions)
+      ..addAll(widget.correctAnsweredQuestions);
     final mediaQuery = MediaQuery.of(context).size;
+    final exam = widget.exams[questionIndex];
+    final options = widget.options;
+    final alloptions = widget.alloptions;
+    final questionOption = widget.questionOptions;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -61,20 +90,15 @@ class _ViewAllDetailPageState extends State<ViewAllDetailPage> {
           Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
-              ' Attempted Questions: ${widget.exams.length}',
+              ' Attempted Questions: ${allQuestions.length}',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          Expanded(
+          Container(
+            height: mediaQuery.height * 0.4,
             child: ListView.builder(
               itemCount: 1,
               itemBuilder: (context, index) {
-                final exam = widget.exams[questionIndex];
-
-                final isCorrectAnswer =
-                    exam.selectedAnswer == exam.correctAnswer;
-                final shuffledOptions = List<String>.from(exam.options);
-                final suffel = shuffledOptions.shuffle(Random());
                 return ListTile(
                   title: Container(
                     padding: EdgeInsets.all(12),
@@ -93,14 +117,24 @@ class _ViewAllDetailPageState extends State<ViewAllDetailPage> {
                     children: [
                       ListView.builder(
                         shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: exam.options.length,
-                        itemBuilder: (context, index) {
-                          final option = exam.options[index];
+                        itemBuilder: (context, optionIndex) {
+                          final option = exam.options[optionIndex];
                           final isCorrectOption = option == exam.correctAnswer;
-                          final optionColor =
-                              isCorrectOption ? Colors.green : Colors.red;
-                          final options = shuffledOptions[index];
+                          final isSelectedOption = userPressedoption == option;
+
+                          Color optionColor;
+
+                          if (isSelectedOption && isCorrectOption) {
+                            optionColor = Colors.green;
+                          } else if (isSelectedOption && !isCorrectOption) {
+                            optionColor = Colors.red;
+                          } else if (!isSelectedOption && isCorrectOption) {
+                            optionColor = Colors.green;
+                          } else {
+                            optionColor = Colors.grey.shade100;
+                          }
 
                           return Container(
                             padding: const EdgeInsets.all(10),
@@ -113,11 +147,11 @@ class _ViewAllDetailPageState extends State<ViewAllDetailPage> {
                               color: optionColor,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                color: optionColor,
+                                color: Colors.black,
                               ),
                             ),
                             child: Text(
-                              options,
+                              ' $option',
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
@@ -132,21 +166,63 @@ class _ViewAllDetailPageState extends State<ViewAllDetailPage> {
               },
             ),
           ),
+          Container(
+            alignment: Alignment.center,
+            height: mediaQuery.height * 0.055,
+            width: mediaQuery.width - 50,
+            decoration: BoxDecoration(
+              color:
+                  userPressedoption == widget.exams[questionIndex].correctAnswer
+                      ? Colors.green
+                      : Colors.red.shade400,
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              'Your Choosed Option is:    $userPressedoption',
+              style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.3),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Spacer(),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               if (questionIndex > 0 && questionIndex <= widget.exams.length - 1)
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    fixedSize:
+                        Size(mediaQuery.width * 0.25, mediaQuery.height * 0.05),
+                  ),
                   onPressed: backToQuestion,
-                  child: Text('Back'),
+                  child: const Text(
+                    'Back',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
-              if (questionIndex < widget.exams.length - 1)
+              if (questionIndex < allQuestions.length - 1)
                 ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        fixedSize:
-                            Size(double.infinity, mediaQuery.height * 0.04)),
-                    onPressed: goToNextQuestion,
-                    child: Text('Next')),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    fixedSize:
+                        Size(mediaQuery.width * 0.25, mediaQuery.height * 0.05),
+                  ),
+                  onPressed: goToNextQuestion,
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
             ],
           ),
         ],

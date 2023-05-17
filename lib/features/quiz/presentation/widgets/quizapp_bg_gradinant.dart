@@ -10,7 +10,7 @@ class QuizBgColor extends StatelessWidget {
       height: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.blue.shade100,
       ),
       child: child,
     );
