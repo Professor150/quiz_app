@@ -1,7 +1,7 @@
-#Quiz App
+## Quiz App
 A quiz app built with Flutter that fetches questions from the Open Trivia Database API and allows users to test their knowledge.
 
-#Features
+## Features
 
 Fetches questions from the Open Trivia Database API.
 Multiple choice questions with four options.
@@ -9,11 +9,11 @@ Tracks the user's score and progress.
 Displays a summary at the end of the quiz.
 Supports different categories and difficulty levels.
 
-Screenshots
+## Screenshots
 
 
 
-#License
+## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 ![IMG_20230518_114720](https://github.com/Professor150/quiz_app/assets/111327972/4fefc303-d769-437c-bc4c-f519df15c5b4)
 ![IMG_20230518_102853](https://github.com/Professor150/quiz_app/assets/111327972/abe6dbad-7939-4b01-a65e-e57850228c57)
