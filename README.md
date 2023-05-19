@@ -1,16 +1,23 @@
-# quiz_app
+#Quiz App
+A quiz app built with Flutter that fetches questions from the Open Trivia Database API and allows users to test their knowledge.
 
-A new Flutter project.
+#Features
 
-## Getting Started
+Fetches questions from the Open Trivia Database API.
+Multiple choice questions with four options.
+Tracks the user's score and progress.
+Displays a summary at the end of the quiz.
+Supports different categories and difficulty levels.
 
-This project is a starting point for a Flutter application.
+Screenshots
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![5](https://github.com/Professor150/quiz_app/assets/111327972/b38ffda9-26ec-42b1-b52d-d10abd62ddf0)
+![IMG_20230518_102729](https://github.com/Professor150/quiz_app/assets/111327972/956e07c8-f58b-47fd-9962-7a21b1970f81)
+![IMG_20230518_102756](https://github.com/Professor150/quiz_app/assets/111327972/66cadc37-9cd2-44fa-89f5-51c5ff65dd86)
+![unnamed](https://github.com/Professor150/quiz_app/assets/111327972/c2c2b519-8fc3-4951-8e77-792290aeb330)
+![IMG_20230518_102853](https://github.com/Professor150/quiz_app/assets/111327972/02c4efa6-add2-4d74-b9b8-c7c209a7ae8a)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+#License
+This project is licensed under the MIT License - see the LICENSE file for details.
