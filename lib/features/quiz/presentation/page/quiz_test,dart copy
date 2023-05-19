@@ -6,6 +6,7 @@ import 'package:quiz_app/core/utils/constants/text_style.dart';
 import 'package:quiz_app/features/quiz/data/data%20source/remote/api_service.dart';
 import 'package:quiz_app/features/quiz/data/model/quiz_data_model.dart';
 import 'package:quiz_app/features/quiz/presentation/page/view_detail_page.dart';
+import 'package:quiz_app/features/quiz/presentation/widgets/quiz_viewdetail_button_widget.dart';
 import 'package:quiz_app/features/quiz/presentation/widgets/quizpage_point_correct_incorrect_show.dart';
 import 'package:quiz_app/features/quiz/presentation/widgets/quizpage_question_option_list.dart';
 import '../../../../core/utils/constants/colors_constants.dart';
@@ -13,7 +14,7 @@ import '../provider/quiz_state.dart';
 import '../widgets/quiz_header.dart';
 import '../widgets/quizapp_bg_gradinant.dart';
 
-class QuizScreen extends StatefulWidget {
+class QuizScreens extends StatefulWidget {
   final List<ExamModel> exams;
   final String category;
   const QuizScreen({
@@ -231,7 +232,6 @@ class _QuizScreenState extends State<QuizScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             final answer = quizProvider
                                 .exams[currentQuestionIndex].correctAnswer;
-                            DateTime? _lastTap;
                             return GestureDetector(
                               onTap: () {
                                 if (!showAnswerStatus) {
@@ -331,53 +331,25 @@ class _QuizScreenState extends State<QuizScreen> {
                                                 restartButton(
                                                     context, quizProvider),
                                                 // view Detail Button
-                                                TextButton(
-                                                  child: const Text(
-                                                    'View Detail',
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  onPressed: () {
-                                                    Future.delayed(
-                                                        // ignore: prefer_const_constructors
-                                                        Duration(
-                                                            microseconds: 300),
-                                                        () {
-                                                      Navigator.of(context)
-                                                          .pushReplacement(
-                                                        MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              ViewDetailPage(
-                                                            exams: quizProvider
-                                                                .exams,
-                                                            currentQuestionIndex:
-                                                                currentQuestionIndex,
-                                                            points: points,
-                                                            correctAnswer:
-                                                                userCorrectAnswer,
-                                                            totalAnswered:
-                                                                totalAnswered,
-                                                            wrongAnswer:
-                                                                wrongAnswer,
-                                                            correctAnsweredQuestions:
-                                                                correctAnsweredQuestions,
-                                                            wrongQuestions:
-                                                                wrongAnswerdQuestions,
-                                                            userTappedOption:
-                                                                userTappedOption,
-                                                            options: options,
-                                                            questionOptions:
-                                                                questionOptions,
-                                                            alloptions: [],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    });
-                                                  },
-                                                ),
+                                                ViewDteailButtonWidget(
+                                                    exams: quizProvider.exams,
+                                                    currentQuestionIndex:
+                                                        currentQuestionIndex,
+                                                    points: points,
+                                                    userCorrectAnswer:
+                                                        userCorrectAnswer,
+                                                    totalAnswered:
+                                                        totalAnswered,
+                                                    wrongAnswer: wrongAnswer,
+                                                    correctAnsweredQuestions:
+                                                        correctAnsweredQuestions,
+                                                    wrongAnswerdQuestions:
+                                                        wrongAnswerdQuestions,
+                                                    userTappedOption:
+                                                        userTappedOption,
+                                                    options: options,
+                                                    questionOptions:
+                                                        questionOptions),
                                               ],
                                             );
                                           },
