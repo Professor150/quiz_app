@@ -12,12 +12,12 @@ Supports different categories and difficulty levels.
 Screenshots
 
 
-![5](https://github.com/Professor150/quiz_app/assets/111327972/b38ffda9-26ec-42b1-b52d-d10abd62ddf0)
-![IMG_20230518_102729](https://github.com/Professor150/quiz_app/assets/111327972/956e07c8-f58b-47fd-9962-7a21b1970f81)
-![IMG_20230518_102756](https://github.com/Professor150/quiz_app/assets/111327972/66cadc37-9cd2-44fa-89f5-51c5ff65dd86)
-![unnamed](https://github.com/Professor150/quiz_app/assets/111327972/c2c2b519-8fc3-4951-8e77-792290aeb330)
-![IMG_20230518_102853](https://github.com/Professor150/quiz_app/assets/111327972/02c4efa6-add2-4d74-b9b8-c7c209a7ae8a)
-
 
 #License
 This project is licensed under the MIT License - see the LICENSE file for details.
+![IMG_20230518_114720](https://github.com/Professor150/quiz_app/assets/111327972/4fefc303-d769-437c-bc4c-f519df15c5b4)
+![IMG_20230518_102853](https://github.com/Professor150/quiz_app/assets/111327972/abe6dbad-7939-4b01-a65e-e57850228c57)
+![unnamed](https://github.com/Professor150/quiz_app/assets/111327972/68411706-76af-4b8f-9872-2af7d6d825f2)
+![IMG_20230518_102756](https://github.com/Professor150/quiz_app/assets/111327972/21d2cf42-b4b2-4a6d-bf09-67c2234dde65)
+![5](https://github.com/Professor150/quiz_app/assets/111327972/1f377836-acab-4784-b152-7d139c2276dd)
+![IMG_20230518_102729](https://github.com/Professor150/quiz_app/assets/111327972/066d7b9f-c120-457c-b257-ec2b825cd394)
