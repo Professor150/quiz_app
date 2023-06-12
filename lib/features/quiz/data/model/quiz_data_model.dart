@@ -1,5 +1,19 @@
 import 'package:equatable/equatable.dart';
 
+class UserPreference {
+  final String question;
+  final List<String> option;
+
+  final String userAnswer;
+  final String actualAnswer;
+
+  UserPreference(
+      {required this.question,
+      required this.option,
+      required this.userAnswer,
+      required this.actualAnswer});
+}
+
 class ExamModel extends Equatable {
   String category;
   String type;

@@ -6,3 +6,4 @@ String totalAnsweredImage = "assets/images/totalAnsweredImage.png";
 String correctAnswerImage = "assets/images/correctAnswerImage.png";
 String wrongAnswerImage = 'assets/images/wrongAnswerImage.jpg';
 String pointsImage = "assets/images/pointsImage.jpg";
+String splashScreenImage = "assets/images/splashscreenimage.png";

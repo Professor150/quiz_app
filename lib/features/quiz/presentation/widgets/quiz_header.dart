@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_app/core/routes/routes.dart';
 import 'package:quiz_app/features/quiz/data/model/quiz_data_model.dart';
-import 'package:quiz_app/features/quiz/presentation/page/view_detail_page.dart';
 
 class QuizHeader extends StatefulWidget {
   final int seconds;
@@ -75,24 +74,17 @@ class _QuizHeaderState extends State<QuizHeader> {
             Text('${widget.questionIndex + 1} of ${widget.data.length}'),
           ],
         ),
-        Container(
-          height: mediaQuery.height * 0.04,
-          width: mediaQuery.width * 0.12,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(12),
+        IconButton(
+          color: Colors.red,
+          icon: const Icon(
+            CupertinoIcons.xmark_circle,
+            size: 30,
           ),
-          child: TextButton.icon(
-            label: const Text(''),
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed(Routes().category);
-            },
-            icon: const Icon(
-              CupertinoIcons.xmark,
-              size: 22,
-              color: Colors.black,
-            ),
-          ),
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+          onPressed: () {
+            Navigator.pushNamed(context, Routes().category);
+          },
         ),
       ],
     );
