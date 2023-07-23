@@ -14,8 +14,9 @@ Supports different categories and difficulty levels.
 
 
 ## License
+This project is licensed under the Pradeep License - see the LICENSE file for details.
 ## Screenshots
-This project is licensed under the MIT License - see the LICENSE file for details.
+
 ![IMG_20230518_114720](https://github.com/Professor150/quiz_app/assets/111327972/4fefc303-d769-437c-bc4c-f519df15c5b4)
 ![IMG_20230518_102853](https://github.com/Professor150/quiz_app/assets/111327972/abe6dbad-7939-4b01-a65e-e57850228c57)
 ![unnamed](https://github.com/Professor150/quiz_app/assets/111327972/68411706-76af-4b8f-9872-2af7d6d825f2)
