@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:quiz_app/core/routes/routes.dart';
 import 'package:quiz_app/features/quiz/data/data%20source/remote/api_service.dart';
 import 'package:quiz_app/features/quiz/presentation/page/quiz_page.dart';
+import 'package:quiz_app/features/quiz/presentation/page/splash_page.dart';
+import 'package:quiz_app/features/quiz/presentation/provider/quiz_state.dart';
 import 'features/quiz/presentation/page/catagory_page.dart';
 
 main() {
@@ -14,12 +16,20 @@ class QuizApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => FetchAllQuizProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => FetchAllQuizProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => QuizState(),
+        ),
+      
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.deepPurple),
-        initialRoute: Routes().category,
+        initialRoute: Routes().splashScreen,
         routes: {
           Routes().category: (context) => const CategoryScreen(
                 exams: [],
@@ -28,6 +38,7 @@ class QuizApp extends StatelessWidget {
                 exams: [],
                 category: '',
               ),
+          Routes().splashScreen: (context) => const WelcomeScreen(),
         },
       ),
     );

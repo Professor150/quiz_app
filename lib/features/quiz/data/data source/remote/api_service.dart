@@ -5,10 +5,15 @@ import 'package:quiz_app/features/quiz/data/model/quiz_data_model.dart';
 
 var baseUrl = "https://opentdb.com";
 
-enum ApiResponseStatus { isLoading, hasData, hasError }
+enum ApiResponseStatus {
+  isLoading,
+  hasData,
+  hasError,
+}
 
 class FetchAllQuizProvider extends ChangeNotifier {
   List<ExamModel> _exams = [];
+  bool isLoading = false;
   ApiResponseStatus? apiResponseStatus;
   String? _errorMessage;
   int wrongAnswered = 0;
@@ -22,6 +27,7 @@ class FetchAllQuizProvider extends ChangeNotifier {
 
       notifyListeners();
       http.Response res =
+          await http.get(Uri.parse('$baseUrl/api.php?amount=10'));
           await http.get(Uri.parse('$baseUrl/api.php?amount=3'));
       if (res.statusCode == 200) {
         print('data is load');
@@ -30,14 +36,19 @@ class FetchAllQuizProvider extends ChangeNotifier {
         apiResponseStatus = ApiResponseStatus.hasData;
         notifyListeners();
       } else {
-        _errorMessage = "Unable to fetch quiz";
+        _errorMessage = "Please Connect Internet";
         apiResponseStatus = ApiResponseStatus.hasError;
         notifyListeners();
       }
     } catch (e) {
-      _errorMessage = "Unable to fetch quiz";
+      _errorMessage = "Please Connect Internet";
       apiResponseStatus = ApiResponseStatus.hasError;
     }
+    notifyListeners();
+  }
+
+  void setIsLoading(bool value) {
+    isLoading = value;
     notifyListeners();
   }
 }

@@ -1,11 +1,12 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_app/core/routes/routes.dart';
 import 'package:quiz_app/core/utils/constants/images.dart';
 import 'package:quiz_app/features/quiz/data/data%20source/remote/api_service.dart';
 import 'package:quiz_app/features/quiz/data/model/quiz_data_model.dart';
-import 'package:quiz_app/features/quiz/presentation/page/quiz_page.dart';
+import 'package:quiz_app/features/quiz/presentation/widgets/category_widget_datapage.dart';
+import 'package:quiz_app/features/quiz/presentation/widgets/category_widget_didchange_dependency.dart';
+import 'package:quiz_app/features/quiz/presentation/widgets/quizapp_bg_gradinant.dart';
 
 class CategoryScreen extends StatefulWidget {
   final List<ExamModel> exams;
@@ -15,17 +16,16 @@ class CategoryScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CategoryScreenState createState() => _CategoryScreenState();
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  bool isLoding = false;
-  final int inedex = 0;
-  late FetchAllQuizProvider _quizProvider;
-
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
+    final dataFetcher = QuizDataFetcher(context);
+    dataFetcher.fetchQuizData();
     _quizProvider = Provider.of<FetchAllQuizProvider>(context);
     if (_quizProvider.exams.isEmpty) {
       await _fetchQuizData();
@@ -42,8 +42,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue.shade300,
+        title: const Text('Topic'),
+        centerTitle: true,
+        leading: const Text(''),
       backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
         child: Column(
@@ -219,6 +223,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
           ],
         ),
       ),
+      backgroundColor: Colors.deepPurple.shade100,
+      body: QuizBackGroundColor(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const CategoryDataPage(),
+            ],
+          ),
+        ),
+      )
     );
   }
 }

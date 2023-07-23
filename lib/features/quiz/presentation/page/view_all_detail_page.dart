@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/core/routes/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_app/features/quiz/data/data%20source/remote/api_service.dart';
 import 'package:quiz_app/features/quiz/data/model/quiz_data_model.dart';
+import 'package:quiz_app/features/quiz/presentation/widgets/viewalldetail_custom_nav_button_widget.dart';
+import 'package:quiz_app/features/quiz/presentation/widgets/viewalldetail_question_widget.dart';
 
 class ViewAllDetailPage extends StatefulWidget {
   final List<ExamModel> exams;
   final int point;
   final int correctAnswer;
   final int wrongAnswer;
+  final List<String> correctAnsweredQuestions;
+  final List<String> wrongQuestions;
+  final List<String> userTappedOption;
+  final List<String> options;
+  final Map<int, List> questionOptions;
+
+  const ViewAllDetailPage({
   final List<UserPreference> userPreference;
   final List<String> correctAnsweredQuestions;
   final List<String> wrongQuestions;
@@ -26,6 +36,7 @@ class ViewAllDetailPage extends StatefulWidget {
     required this.wrongQuestions,
     required this.userTappedOption,
     required this.options,
+    required this.questionOptions,
     required this.optionsMap,
     required this.currentQuestionOptionsIndex,
   }) : super(key: key);
@@ -93,6 +104,7 @@ class _ViewAllDetailPageState extends State<ViewAllDetailPage> {
   int index = 0;
   @override
   Widget build(BuildContext context) {
+    final userPressedOption = widget.userTappedOption[questionIndex];
     final optionList = widget.currentQuestionOptionsIndex[index];
     final forOptions = widget.exams[questionIndex].options;
 
@@ -101,8 +113,11 @@ class _ViewAllDetailPageState extends State<ViewAllDetailPage> {
       ..addAll(widget.wrongQuestions)
       ..addAll(widget.correctAnsweredQuestions);
     final mediaQuery = MediaQuery.of(context).size;
+    final exam = widget.exams[questionIndex];
+
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue.shade300,
         title: Text(
           'Total Points :  ${widget.point}',
           style: const TextStyle(
@@ -114,9 +129,22 @@ class _ViewAllDetailPageState extends State<ViewAllDetailPage> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               ' Attempted Questions: ${allQuestions.length}',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          QuestionWidget(
+            mediaQuery: mediaQuery,
+            exam: exam,
+            questionIndex: questionIndex,
+            userPressedOption: userPressedOption,
+            questionOptions: widget.questionOptions,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
@@ -234,6 +262,24 @@ class _ViewAllDetailPageState extends State<ViewAllDetailPage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               if (questionIndex > 0 && questionIndex <= widget.exams.length - 1)
+                NavButtonWidget(
+                  mediaQuery: mediaQuery,
+                  navQuestion: backToQuestion,
+                  title: "Previous",
+                ),
+              if (questionIndex < allQuestions.length - 1)
+                NavButtonWidget(
+                  mediaQuery: mediaQuery,
+                  navQuestion: goToNextQuestion,
+                  title: "Next",
+                ),
+              if (questionIndex == widget.exams.length - 1)
+                NavButtonWidget(
+                  mediaQuery: mediaQuery,
+                  navQuestion: () =>
+                      Navigator.popAndPushNamed(context, Routes().category),
+                  title: "Finish",
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
