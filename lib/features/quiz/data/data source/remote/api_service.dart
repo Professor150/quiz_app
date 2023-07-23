@@ -28,6 +28,7 @@ class FetchAllQuizProvider extends ChangeNotifier {
       notifyListeners();
       http.Response res =
           await http.get(Uri.parse('$baseUrl/api.php?amount=10'));
+          await http.get(Uri.parse('$baseUrl/api.php?amount=3'));
       if (res.statusCode == 200) {
         print('data is load');
         final result = List.from(json.decode(res.body)["results"]);

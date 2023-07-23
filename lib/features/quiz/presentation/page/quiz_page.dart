@@ -28,7 +28,9 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   final ValueNotifier<int> _timerValue = ValueNotifier(30);
+  final ValueNotifier<int> _timerValue = ValueNotifier(100);
   int currentQuestionIndex = 0;
+  int i = 1;
   Timer? timer;
   int points = 0;
   bool isLoaded = false;
@@ -46,12 +48,39 @@ class _QuizScreenState extends State<QuizScreen> {
   List<String> correctAnsweredQuestions = [];
   List<String> wrongAnswerdQuestions = [];
   final List<String> userTappedOption = [];
+  List<UserPreference> userPreference = [];
+  final List<String> currentQuestionOptionsIndex = [];
+  Map<int, dynamic> questAndOption = {};
 
   @override
   void initState() {
     super.initState();
     _fetchQuizData();
+    initializeQuiz();
     startTimer();
+    questAndOption[i] = {};
+  }
+
+  // Future<void> initializeQuiz() async {
+  //   if (context.read<FetchAllQuizProvider>().exams.isNotEmpty) {
+  //     await context.read<FetchAllQuizProvider>().getQuiz();
+  //   }
+  // }
+  Future<void> initializeQuiz() async {
+    final quizProvider = context.read<FetchAllQuizProvider>();
+
+    if (quizProvider.exams.isEmpty) {
+      try {
+        await quizProvider.getQuiz();
+        setState(() {
+          currentQuestionIndex = 0;
+          optionsMap = Map.fromEntries(quizProvider.exams.asMap().entries.map(
+                (entry) => MapEntry(
+                    entry.key as String, List.from(entry.value.options)),
+              ));
+        });
+      } catch (error) {}
+    }
   }
 
   Future<void> _fetchQuizData() async {
@@ -98,6 +127,36 @@ class _QuizScreenState extends State<QuizScreen> {
   addOptionToMap(i, opt, int length) {
     questionOptions[i] = List.from(opt);
   }
+
+  void updateListOnTap(List<String> opt) {
+    questAndOption[i] = opt;
+    print("The option in method is $opt");
+    // questAndOption.forEach((i, value) {
+    //   questAndOption[i] = opt;
+    // });
+    print(questAndOption);
+    i++;
+    print("i++ is $i");
+  }
+
+  // void enterToList(List<String> opt) {
+  //   optList = opt;
+  //   enterToList(optList);
+  //   optList.clear();
+  // }
+
+  bool isAnswerCorrect = false;
+  bool showAnswerStatus = false;
+  int totalAnswered = 0;
+  int userCorrectAnswer = 0;
+  int wrongAnswer = 0;
+  Map<String, List<String>> optionsMap = {};
+
+  List<String> correctAnsweredQuestions = [];
+  List<String> wrongAnswerdQuestions = [];
+  final List<String> userTappedOption = [];
+
+  Map<int, dynamic> questionOption = {};
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +224,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   print('data');
                   currentQuestion =
                       quizProvider.exams[currentQuestionIndex].question;
+                  print('$currentQuestion');
                   options.clear();
                   options.addAll(
                       quizProvider.exams[currentQuestionIndex].options
@@ -193,6 +253,42 @@ class _QuizScreenState extends State<QuizScreen> {
                           points: points,
                           showAnswerStatus: showAnswerStatus,
                           isAnswerCorrect: isAnswerCorrect),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            height: mediaQuery.height * 0.1,
+                            width: mediaQuery.width * 0.1,
+                            decoration: const BoxDecoration(
+                              color: Colors.amber,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              '$points',
+                              style: const TextStyle(
+                                fontSize: 22,
+                                letterSpacing: 1.3,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: mediaQuery.width * 0.01),
+                          if (showAnswerStatus)
+                            AnimatedOpacity(
+                              duration: Duration(milliseconds: 500),
+                              opacity: showAnswerStatus ? 1.0 : 0.0,
+                              child: Text(
+                                isAnswerCorrect ? 'Correct!' : 'Incorrect!',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: isAnswerCorrect
+                                      ? Colors.lightGreen
+                                      : Colors.red,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
 
                       SizedBox(
                         height: mediaQuery.height * 0.07,
@@ -207,7 +303,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           boxShadow: [
                             const BoxShadow(
                               color: Colors.blue,
-                              offset: Offset(-1, 2),
+                              offset: const Offset(-1, 2),
                             ),
                           ],
                           color: const Color.fromRGBO(211, 238, 240, 0.898),
@@ -230,6 +326,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           itemCount: options.length,
                           itemBuilder: (BuildContext context, int index) {
                             final answer = quizProvider
+                            var answer = quizProvider
                                 .exams[currentQuestionIndex].correctAnswer;
                             DateTime? _lastTap;
                             return GestureDetector(
@@ -300,6 +397,97 @@ class _QuizScreenState extends State<QuizScreen> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   SizedBox(
+                                if (currentQuestionIndex ==
+                                    quizProvider.exams.length - 1) {
+                                  _lastTap = null;
+                                  Navigator.pushReplacementNamed(
+                                      context, Routes().category);
+                                }
+                                setState(() {
+                                  updateListOnTap(options);
+                                  print("The option is $options");
+                                  totalAnswered++;
+                                  if (answer == options[index]) {
+                                    isAnswerCorrect = true;
+                                    optionsColor[index] = Colors.lightGreen;
+                                    points = points + 15;
+                                    userCorrectAnswer++;
+                                    correctAnsweredQuestions.add(answer[index]);
+                                    userTappedOption.add(options[index]);
+                                    currentQuestionOptionsIndex.add(widget
+                                        .exams[currentQuestionIndex].options
+                                        .toString());
+                                    print(
+                                        'Current questions $currentQuestionOptionsIndex');
+                                    print(
+                                        'userTappedOption correctAnswer $userTappedOption');
+                                  } else {
+                                    print(
+                                        'currentQuestionOptionsIndex is $currentQuestionOptionsIndex');
+                                    currentQuestionOptionsIndex.add(widget
+                                        .exams[currentQuestionIndex].options
+                                        .toString());
+                                    wrongAnswer++;
+                                    isAnswerCorrect = false;
+                                    optionsColor[index] = Colors.red.shade300;
+
+                                    optionsColor[options.indexOf(answer)] =
+                                        Colors.lightGreen;
+                                    wrongAnswerdQuestions.add(options[index]);
+                                    userTappedOption.add(options[index]);
+                                    print(
+                                        'userTappedOption Wrognquestions $userTappedOption');
+                                  }
+
+                                  userPreference.add(UserPreference(
+                                      question: quizProvider
+                                          .exams[currentQuestionIndex].question,
+                                      // option: options,
+                                      option: quizProvider
+                                          .exams[currentQuestionIndex]
+                                          .incorrectAnswers,
+                                      userAnswer: answer,
+                                      actualAnswer: quizProvider
+                                          .exams[currentQuestionIndex]
+                                          .correctAnswer));
+                                  points = points - 5;
+                                  showAnswerStatus = true;
+                                  Future.delayed(Duration(milliseconds: 500),
+                                      () {
+                                    setState(() {
+                                      showAnswerStatus = false;
+                                    });
+                                  });
+                                  if (currentQuestionIndex <
+                                      quizProvider.exams.length - 1) {
+                                    Future.delayed(
+                                        const Duration(milliseconds: 500), () {
+                                      gotoNextQuestion();
+                                    });
+                                  } else {
+                                    if (currentQuestionIndex ==
+                                        quizProvider.exams.length - 1) {
+                                      timer!.cancel;
+                                      resetColors();
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Game Over'),
+                                            contentPadding:
+                                                EdgeInsets.only(bottom: 16),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                SizedBox(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.02,
+                                                ),
+                                                const Text(
+                                                    'All questions have been answered.'),
+                                                SizedBox(
                                                     height:
                                                         MediaQuery.of(context)
                                                                 .size
@@ -393,6 +581,132 @@ class _QuizScreenState extends State<QuizScreen> {
                                   mediaQuery: mediaQuery,
                                   options: options,
                                   index: index),
+                                                            0.02),
+                                                Text('Total Points: $points',
+                                                    style: points >= 0
+                                                        ? const TextStyle(
+                                                            fontSize: 20,
+                                                            color: Colors
+                                                                .lightGreen)
+                                                        : const TextStyle(
+                                                            fontSize: 20,
+                                                            color: Colors.red)),
+                                              ],
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                child: const Text(
+                                                  'Restart',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          microseconds: 300),
+                                                      () {
+                                                    Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                QuizScreen(
+                                                                  exams:
+                                                                      quizProvider
+                                                                          .exams,
+                                                                  category: quizProvider
+                                                                      .exams[
+                                                                          currentQuestionIndex]
+                                                                      .category,
+                                                                )));
+                                                  });
+
+                                                  setState(() {
+                                                    points = 0;
+                                                    currentQuestionIndex = 0;
+                                                  });
+                                                },
+                                              ),
+                                              TextButton(
+                                                child: const Text(
+                                                  'View Detail',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          microseconds: 300),
+                                                      () {
+                                                    print(
+                                                        ' this is ootion maps $optionsMap');
+
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                      MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            ViewDetailPage(
+                                                          currentQuestionIndex:
+                                                              currentQuestionIndex,
+                                                          exams: quizProvider
+                                                              .exams,
+                                                          points: points,
+                                                          correctAnswer:
+                                                              userCorrectAnswer,
+                                                          totalAnswered:
+                                                              totalAnswered,
+                                                          wrongAnswer:
+                                                              wrongAnswer,
+                                                          userPreference:
+                                                              userPreference,
+                                                          correctAnsweredQuestions:
+                                                              correctAnsweredQuestions,
+                                                          wrongQuestions:
+                                                              wrongAnswerdQuestions,
+                                                          userTappedOption:
+                                                              userTappedOption,
+                                                          options: options,
+                                                          optionsMap:
+                                                              optionsMap,
+                                                          currentQuestionOptionsIndex:
+                                                              currentQuestionOptionsIndex,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                    timer!.cancel();
+                                  }
+                                });
+                              },
+                              // questions option Lists
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 14),
+                                alignment: Alignment.center,
+                                width: mediaQuery.width - 100,
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                  color: optionsColor[index],
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  options[index],
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: 1.3,
+                                  ),
+                                ),
+                              ),
                             );
                           },
                         ),

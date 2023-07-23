@@ -11,6 +11,7 @@ class ViewDetailPage extends StatefulWidget {
   final int totalAnswered;
   final int correctAnswer;
   final int wrongAnswer;
+  final List<UserPreference> userPreference;
   final List<String> correctAnsweredQuestions;
   final List<String> wrongQuestions;
   final List<String> userTappedOption;
@@ -18,6 +19,9 @@ class ViewDetailPage extends StatefulWidget {
   final List<String> alloptions;
   Map<int, List> questionOptions;
   ViewDetailPage({
+  final Map<String, List<String>> optionsMap;
+  final List<String> currentQuestionOptionsIndex;
+  const ViewDetailPage({
     Key? key,
     required this.exams,
     required this.currentQuestionIndex,
@@ -25,12 +29,15 @@ class ViewDetailPage extends StatefulWidget {
     required this.totalAnswered,
     required this.correctAnswer,
     required this.wrongAnswer,
+    required this.userPreference,
     required this.correctAnsweredQuestions,
     required this.wrongQuestions,
     required this.userTappedOption,
     required this.options,
     required this.alloptions,
     required this.questionOptions,
+    required this.optionsMap,
+    required this.currentQuestionOptionsIndex,
   }) : super(key: key);
 
   @override
@@ -60,6 +67,7 @@ class _ViewDetailPageState extends State<ViewDetailPage> {
   }
 
   int index = 0;
+
   @override
   Widget build(BuildContext context) {
     int totalQuestion = widget.exams.length;
@@ -67,6 +75,7 @@ class _ViewDetailPageState extends State<ViewDetailPage> {
     int totalAnswered = widget.totalAnswered;
     int correctAnswer = widget.correctAnswer;
     int wrongAnswer = widget.wrongAnswer;
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -134,6 +143,51 @@ class _ViewDetailPageState extends State<ViewDetailPage> {
                       options: widget.options,
                       questionOptions: widget.questionOptions,
                     ),
+          ),
+          const Divider(
+            color: Colors.black,
+          ),
+          getListTile(
+            'Correct Answers:',
+            '$correctAnswer',
+            Image.asset(correctAnswerImage),
+          ),
+          const Divider(
+            color: Colors.black,
+          ),
+          getListTile(
+            'Incorrect Answers:',
+            '$wrongAnswer',
+            Image.asset(wrongAnswerImage),
+          ),
+          const Divider(
+            color: Colors.black,
+          ),
+          getListTile(
+            'Total Points:',
+            '$points',
+            Image.asset(pointsImage),
+          ),
+          const Spacer(),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(alignment: Alignment.center),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ViewAllDetailPage(
+                    point: widget.points,
+                    exams: widget.exams,
+                    correctAnswer: widget.correctAnswer,
+                    wrongAnswer: widget.wrongAnswer,
+                    userPreference: widget.userPreference,
+                    correctAnsweredQuestions: widget.correctAnsweredQuestions,
+                    wrongQuestions: widget.wrongQuestions,
+                    userTappedOption: widget.userTappedOption,
+                    options: widget.options,
+                    optionsMap: widget.optionsMap,
+                    currentQuestionOptionsIndex:
+                        widget.currentQuestionOptionsIndex,
                   ),
                 );
               },
